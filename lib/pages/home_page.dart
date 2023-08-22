@@ -33,8 +33,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: const Center(child: Text('Home page')),
+        title: Text(
+          'Chats',
+          style: TextStyle(fontSize: 30),
+        ),
+        backgroundColor: Colors.black,
+        elevation: 0,
         actions: [
           IconButton(
             onPressed: signOut,
@@ -56,15 +62,24 @@ class _HomePageState extends State<HomePage> {
           );
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator(
-            color: Colors.blue,
-            strokeWidth: 1,
+          return const Center(
+            child: CircularProgressIndicator(
+              color: Colors.blue,
+              strokeWidth: 1,
+            ),
           );
         }
-        return ListView(
-          children: snapshot.data!.docs
-              .map<Widget>((doc) => _builderListTiles(doc))
-              .toList(),
+        return Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: ListView(
+            children: snapshot.data!.docs
+                .map<Widget>((doc) => Padding(
+                      padding:
+                          const EdgeInsets.only(top: 8, right: 12, left: 12),
+                      child: _builderListTiles(doc),
+                    ))
+                .toList(),
+          ),
         );
       },
     );
@@ -73,17 +88,34 @@ class _HomePageState extends State<HomePage> {
   Widget _builderListTiles(DocumentSnapshot document) {
     Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
     if (_auth.currentUser!.email != data['email']) {
-      return ListTile(
-        title: Text(data['email']),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ChatPage(
-                  receiverEmail: data['email'], receiverId: data['uid']),
+      return Container(
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListTile(
+            leading: const CircleAvatar(
+              backgroundImage: AssetImage('images/avatar.jpeg'),
             ),
-          );
-        },
+            title: Text(
+              data['email'],
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ChatPage(
+                      receiverEmail: data['email'], receiverId: data['uid']),
+                ),
+              );
+            },
+          ),
+        ),
       );
     }
     return Container();

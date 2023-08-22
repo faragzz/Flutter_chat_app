@@ -36,7 +36,9 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
+        backgroundColor: Colors.black,
         title: Center(
           child: Text(widget.receiverEmail),
         ),
@@ -71,10 +73,13 @@ class _ChatPageState extends State<ChatPage> {
             ),
           );
         }
-        return ListView(
-          children: snapshot.data!.docs
-              .map<Widget>((doc) => _messageListTile(doc))
-              .toList(),
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView(
+            children: snapshot.data!.docs
+                .map<Widget>((doc) => _messageListTile(doc))
+                .toList(),
+          ),
         );
       },
     );
@@ -107,7 +112,7 @@ class _ChatPageState extends State<ChatPage> {
   //Build Messgae input btn
   Widget _buildMessageInput() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(bottom: 15, left: 10, right: 20),
       child: Row(
         children: [
           Expanded(
@@ -120,7 +125,7 @@ class _ChatPageState extends State<ChatPage> {
           IconButton(
             onPressed: sendMessage,
             icon: const Icon(
-              Icons.arrow_upward,
+              Icons.send_rounded,
               size: 40,
             ),
           ),
